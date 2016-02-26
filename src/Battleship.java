@@ -1,5 +1,8 @@
 /**
- * @ AUTHOR NAME HERE
+ * @ Chukwudi Derek Uche
+ * @ Kyle Ohanian
+ * @ Will Jayne
+ * @ Jake Brabec
  * @ Starter Code By Guocheng
  *
  * 2016-01-30
@@ -20,10 +23,12 @@ public class Battleship {
 
 	char[] letters;
 	int[][] grid;
+	int[][] probability_grid;
 
 	void placeShips(String opponentID) {
 		// Fill Grid With -1s
-		for(int i = 0; i < grid.length; i++) { for(int j = 0; j < grid[i].length; j++) grid[i][j] = -1; }
+		for(int i = 0; i < grid.length; i++)
+			for(int j = 0; j < grid[i].length; j++) grid[i][j] = -1;WWWWWWWW
 
 		// Place Ships
 		placeDestroyer("A0", "A1");
@@ -37,13 +42,14 @@ public class Battleship {
 		for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
 				if (this.grid[i][j] == -1) {
-					String wasHitSunkOrMiss = placeMove(this.letters[i] + String.valueOf(j));
+					String wasHitSunkOrMiss =
+						placeMove(this.letters[i] + String.valueOf(j));
 
-					if (wasHitSunkOrMiss.equals("Hits") || 
+					if (wasHitSunkOrMiss.equals("Hits") ||
 							wasHitSunkOrMiss.equals("Sunk")) {
 						this.grid[i][j] = 1;
 					} else {
-						this.grid[i][j] = 0;			
+						this.grid[i][j] = 0;
 					}
 					return;
 				}
@@ -64,7 +70,14 @@ public class Battleship {
 
 	public Battleship() {
 		this.grid = new int[8][8];
-		for(int i = 0; i < grid.length; i++) { for(int j = 0; j < grid[i].length; j++) grid[i][j] = -1; }
+		this.probability_grid = new int[8][8];
+
+		for(int i = 0; i < grid.length; i++)
+			for(int j = 0; j < grid[i].length; j++) {
+				grid[i][j] = -1;
+				probability_grid[i][j] = 8;
+			}
+
 		this.letters = new char[] {'A','B','C','D','E','F','G','H'};
 
 		destroyer = new String[] {"A0", "A0"};
@@ -86,7 +99,7 @@ public class Battleship {
 			data = br.readLine();
 		} catch (Exception e) {
 			System.out.println("Error: when connecting to the server...");
-			socket = null; 
+			socket = null;
 		}
 
 		if (data == null || data.contains("False")) {
@@ -95,8 +108,6 @@ public class Battleship {
 			System.exit(1); // Close Client
 		}
 	}
-
-
 
 	public void gameMain() {
 		while(true) {
@@ -109,11 +120,11 @@ public class Battleship {
 					this.dataPassthrough = null;
 				}
 			} catch (IOException ioe) {
-				System.out.println("IOException: in gameMain"); 
+				System.out.println("IOException: in gameMain");
 				ioe.printStackTrace();
 			}
 			if (this.data == null) {
-				try { this.socket.close(); } 
+				try { this.socket.close(); }
 				catch (IOException e) { System.out.println("Socket Close Error"); }
 				return;
 			}
@@ -161,23 +172,23 @@ public class Battleship {
 	}
 
 	void placeDestroyer(String startPos, String endPos) {
-		destroyer = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		destroyer = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	void placeSubmarine(String startPos, String endPos) {
-		submarine = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		submarine = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	void placeCruiser(String startPos, String endPos) {
-		cruiser = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		cruiser = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	void placeBattleship(String startPos, String endPos) {
-		battleship = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		battleship = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	void placeCarrier(String startPos, String endPos) {
-		carrier = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		carrier = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	String placeMove(String pos) {
@@ -189,7 +200,7 @@ public class Battleship {
 
 		this.out.print(pos);
 		out.flush();
-		try { data = this.br.readLine(); } 
+		try { data = this.br.readLine(); }
 		catch(Exception e) { System.out.println("No response after from the server after place the move"); }
 
 		if (data.contains("Hit")) return "Hit";
@@ -212,4 +223,3 @@ public class Battleship {
 		}
 	}
 }
-
