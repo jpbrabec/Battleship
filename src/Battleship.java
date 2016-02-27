@@ -46,7 +46,7 @@ public class Battleship {
 
 	void makeMove() {
 		Random rand = new Random();
-		int random = rand.nextInt() % bitches;
+		int random = rand.nextInt(bitches);
 		int new_bitch = bitches;
 		int x = -1;
 		int y = -1;
