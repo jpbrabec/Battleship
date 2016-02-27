@@ -28,6 +28,27 @@ public class Battleship {
 	int[][] grid;
 	int[][] probability_grid;
 	int bitches;
+	WeHaveAMatch sloot = null;
+
+	public static class WeHaveAMatch() {
+		int x, y, current_x, current_y;
+
+		int num_Attempts = 0;
+		boolean checked = false;
+		boolean vert = false;
+
+		public WeHaveAMatch(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		public void increment() {
+			num_Attempts++;
+		}
+
+		public void check
+
+	}
 
     void saveLog() {
         if(currentOpponentID == null)
@@ -89,7 +110,6 @@ public class Battleship {
 			for (int j = 0; j < 8; j++) {
 				x = i;
 				y = j;
-				new_bitch -= probability_grid[i][j];
 				if (new_bitch <= 0) break outerloop;
 
 			}
@@ -122,9 +142,14 @@ public class Battleship {
 		String wasHitSunkOrMiss =
 			placeMove(this.letters[x] + String.valueOf(y));
 
-		if (wasHitSunkOrMiss.equals("Hits") ||
-				wasHitSunkOrMiss.equals("Sunk")) {
-					this.grid[x][y] = 1;
+		if (wasHitSunkOrMiss.equals("Hits") {
+			this.grid[x][y] = 1;
+			if (sloots == null) {
+
+			}
+		} else if (wasHitSunkOrMiss.equals("Sunk")) {
+			this.grid[x][y] = 1;
+			sloots = null;
 		} else this.grid[x][y] = 0;
 
 		return;
