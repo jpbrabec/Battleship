@@ -22,20 +22,53 @@ public class Battleship {
 	public static String GAME_SERVER = "battleshipgs.purduehackers.com";
 
 	//////////////////////////////////////  PUT YOUR CODE HERE //////////////////////////////////////
-
+    PrintWriter printWriter;
+    String currentOpponentID;
 	char[] letters;
 	int[][] grid;
 	int[][] probability_grid;
 	int bitches;
 
+    void saveLog() {
+        if(currentOpponentID == null)
+            return;
+        System.out.println("Saving log for: " + currentOpponentID);
+        File file = new File("logs/"+currentOpponentID+".txt");
+        file.getParentFile().mkdirs();
+        try {
+            printWriter = new PrintWriter("logs/"+currentOpponentID+".txt","UTF-8");
+            printWriter.println(currentOpponentID);
+            //Store all confirmed hits
+            for(int i = 0; i < grid.length; i++) {
+                String temp = "";
+                for(int j = 0; j < grid[i].length; j++) {
+                    temp += grid[j][i]+",";
+                }
+                printWriter.println(temp);
+            }
+            printWriter.flush();
+            printWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Resets game logic
+     */
+    void resetGame() {
+        saveLog();
+        System.out.print("Clearing Grid...");
+        // Fill Grid With -1s
+        for(int i = 0; i < grid.length; i++)
+            for(int j = 0; j < grid[i].length; j++)
+                grid[i][j] = -1;
+    }
 	void placeShips(String opponentID) {
-		// Fill Grid With -1s
-		for(int i = 0; i < grid.length; i++)
-			for(int j = 0; j < grid[i].length; j++) {
-				grid[i][j] = -1;
-				probability_grid[i][j] = 8;
-				bitches = 8 * 8 * 8;
-			}
+        resetGame();
+        currentOpponentID = opponentID;
+
+
 		// Place Ships
 		placeDestroyer("A0", "A1");
 		placeSubmarine("B0", "B2");
@@ -58,6 +91,7 @@ public class Battleship {
 				y = j;
 				new_bitch -= probability_grid[i][j];
 				if (new_bitch <= 0) break outerloop;
+
 			}
 		}
 
@@ -199,13 +233,16 @@ public class Battleship {
 				this.makeMove();
 			} else if (data.contains("Error" )) {
 				System.out.println("Error: " + data);
+                saveLog();
 				System.exit(1); // Exit sys when there is an error
 			} else if (data.contains("Die" )) {
 				System.out.println("Error: Your client was disconnected using the Game Viewer.");
-				System.exit(1); // Close Client
+                saveLog();
+                System.exit(1); // Close Client
 			} else {
 				System.out.println("Recieved Unknown Response:" + data);
-				System.exit(1); // Exit sys when there is an unknown response
+                saveLog();
+                System.exit(1); // Exit sys when there is an unknown response
 			}
 		}
 	}
