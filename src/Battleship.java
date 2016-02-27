@@ -14,7 +14,6 @@
 import java.io.*;
 import java.net.Socket;
 import java.net.InetAddress;
-import java.lang.Thread;
 import java.util.Random;
 
 public class Battleship {
@@ -27,17 +26,17 @@ public class Battleship {
 	char[] letters;
 	int[][] grid;
 	int[][] probability_grid;
-	int bitches;
-	WeHaveAMatch sloot = null;
+	int totalProbability;
+	Matching match = null;
 
-	public static class WeHaveAMatch {
+	public static class Matching {
 		int x, y, current_x, current_y;
 
 		int num_Attempts = 0;
 		boolean checked = false;
 		boolean vert = false;
 
-		public WeHaveAMatch(int x, int y) {
+		public Matching(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
@@ -102,8 +101,8 @@ public class Battleship {
 
 	void makeMove() {
 		Random rand = new Random();
-		int random = rand.nextInt(bitches);
-		int new_bitch = bitches;
+		int random = rand.nextInt(totalProbability);
+		int new_probability = totalProbability;
 		int x = -1;
 		int y = -1;
 
@@ -112,34 +111,34 @@ public class Battleship {
 			for (int j = 0; j < 8; j++) {
 				x = i;
 				y = j;
-				new_bitch -= probability_grid[x][y];
-				if (new_bitch <= 0) break outerloop;
+				new_probability -= probability_grid[x][y];
+				if (new_probability <= 0) break outerloop;
 			}
 		}
 
-		System.out.println(bitches);
-		bitches -= probability_grid[x][y];
+		System.out.println(totalProbability);
+		totalProbability -= probability_grid[x][y];
 		probability_grid[x][y] = 0;
 
 		//if on first row
 		if (x != 0) {
 			probability_grid[x-1][y] -= 2;
-			bitches -= 2;
+			totalProbability -= 2;
 		}
 
 		if (x != 7) {
 			probability_grid[x+1][y] -= 2;
-			bitches -= 2;
+			totalProbability -= 2;
 		}
 
 		if (y != 0) {
 			probability_grid[x][y-1] -= 2;
-			bitches -= 2;
+			totalProbability -= 2;
 		}
 
 		if (y != 7) {
 			probability_grid[x][y+1] -= 2;
-			bitches -= 2;
+			totalProbability -= 2;
 		}
 
 		String wasHitSunkOrMiss =
@@ -147,12 +146,12 @@ public class Battleship {
 
 		if (wasHitSunkOrMiss.equals("Hits")) {
 			this.grid[x][y] = 1;
-			if (sloot == null) {
+			if (match == null) {
 
 			}
 		} else if (wasHitSunkOrMiss.equals("Sunk")) {
 			this.grid[x][y] = 1;
-			sloot = null;
+			match = null;
 		} else this.grid[x][y] = 0;
 
 		return;
@@ -176,7 +175,7 @@ public class Battleship {
 			for(int j = 0; j < grid[i].length; j++) {
 				grid[i][j] = -1;
 				probability_grid[i][j] = 8;
-				bitches = 8 * 8 * 8;
+				totalProbability = 8 * 8 * 8;
 			}
 
 		this.letters = new char[] {'A','B','C','D','E','F','G','H'};
