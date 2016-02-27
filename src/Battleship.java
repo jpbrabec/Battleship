@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.lang.Thread;
+import java.util.Random;
 
 public class Battleship {
 	public static String API_KEY = "395568420";
@@ -25,12 +26,16 @@ public class Battleship {
 	char[] letters;
 	int[][] grid;
 	int[][] probability_grid;
+	int bitches;
 
 	void placeShips(String opponentID) {
 		// Fill Grid With -1s
 		for(int i = 0; i < grid.length; i++)
-			for(int j = 0; j < grid[i].length; j++) grid[i][j] = -1;WWWWWWWW
-
+			for(int j = 0; j < grid[i].length; j++) {
+				grid[i][j] = -1;
+				probability_grid[i][j] = 8;
+				bitches = 8 * 8 * 8;
+			}
 		// Place Ships
 		placeDestroyer("A0", "A1");
 		placeSubmarine("B0", "B2");
@@ -40,24 +45,56 @@ public class Battleship {
 	}
 
 	void makeMove() {
-		for(int i = 0; i < 8; i++) {
-			for(int j = 0; j < 8; j++) {
-				if (this.grid[i][j] == -1) {
-					String wasHitSunkOrMiss =
-						placeMove(this.letters[i] + String.valueOf(j));
+		Random rand = new Random();
+		int random = rand.nextInt() % bitches;
+		int new_bitch = bitches;
+		int x = -1;
+		int y = -1;
 
-					if (wasHitSunkOrMiss.equals("Hits") ||
-							wasHitSunkOrMiss.equals("Sunk")) {
-						this.grid[i][j] = 1;
-					} else {
-						this.grid[i][j] = 0;
-					}
-					return;
-				}
+		outerloop:
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				x = i;
+				y = j;
+				new_bitch -= probability_grid[i][j];
+				if (new_bitch <= 0) break outerloop;
 			}
 		}
-	}
 
+		probability_grid[x][y] = 0;
+		bitches-=8;
+
+		//if on first row
+		if (x != 0) {
+			probability_grid[x-1][y] -= 2;
+			bitches -= 2;
+		}
+
+		if (x != 7) {
+			probability_grid[x+1][y] -= 2;
+			bitches -= 2;
+		}
+
+		if (y != 0) {
+			probability_grid[x][y-1] -= 2;
+			bitches -= 2;
+		}
+
+		if (y != 7) {
+			probability_grid[x][y+1] -= 2;
+			bitches -= 2;
+		}
+
+		String wasHitSunkOrMiss =
+			placeMove(this.letters[x] + String.valueOf(y));
+
+		if (wasHitSunkOrMiss.equals("Hits") ||
+				wasHitSunkOrMiss.equals("Sunk")) {
+					this.grid[x][y] = 1;
+		} else this.grid[x][y] = 0;
+
+		return;
+	}
 	////////////////////////////////////// ^^^^^ PUT YOUR CODE ABOVE HERE ^^^^^ //////////////////////////////////////
 
 	Socket socket;
@@ -77,6 +114,7 @@ public class Battleship {
 			for(int j = 0; j < grid[i].length; j++) {
 				grid[i][j] = -1;
 				probability_grid[i][j] = 8;
+				bitches = 8 * 8 * 8;
 			}
 
 		this.letters = new char[] {'A','B','C','D','E','F','G','H'};
@@ -205,7 +243,7 @@ public class Battleship {
 		catch(Exception e) { System.out.println("No response after from the server after place the move"); }
 
 		if (data.contains("Hit")) return "Hit";
-		else if (data.contains("Sunk")) return "Sun";
+		else if (data.contains("Sunk")) return "Sunk";
 		else if (data.contains("Miss")) return "Miss";
 		else {
 			this.dataPassthrough = data;
