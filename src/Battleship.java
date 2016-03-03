@@ -19,6 +19,10 @@ import java.util.Random;
 public class Battleship {
 	public static String API_KEY = "395568420";
 	public static String GAME_SERVER = "battleshipgs.purduehackers.com";
+    ArrayList<String> setLocations = new ArrayList<String>();
+    
+    public static final String myLetters = "ABCDEFGH";
+    public static final String numbers = "01234567";
 
 	//////////////////////////////////////  PUT YOUR CODE HERE //////////////////////////////////////
     PrintWriter printWriter;
@@ -91,13 +95,220 @@ public class Battleship {
         currentOpponentID = opponentID;
 
 
-		// Place Ships
-		placeDestroyer("A0", "A1");
-		placeSubmarine("B0", "B2");
-		placeCruiser("C0", "C2");
-		placeBattleship("D0", "D3");
-		placeCarrier("E0", "E4");
+        // Place Ships
+        
+        
+        /* EDIT: create a randomnizer and come up with a combo for each ship.
+         when locations are set, add the locations to an arraylist, and check
+         the list whenever a location is randomnized.
+         */
+        
+        
+        setCarrierPosition();
+        setBattleshipPosition();
+        setCruiserPosition();
+        setSubmarinePosition();
+        setDestroyerPosition();
 	}
+    
+    /* The next 5 methods will come up with randomnly generated
+     locations for the different ships. Because of the sizes, we also
+     have to take account of the spaces that the ship is over, which can be
+     more than two spaces.
+     */
+    
+    void setDestroyerPosition() {
+        boolean swag = true;
+        boolean checker = true;
+        while(swag) {
+            checker = true;
+            Random randomnizer = new Random();
+            char letterLocation = myLetters.charAt(randomnizer.nextInt(letters.length));
+            
+            
+            int numberDestroyer = (int)(Math.random()*7);
+            String letterLocationDuo = Character.toString(letterLocation);
+            String number = Integer.toString(numberDestroyer);
+            String numberPlusOne = Integer.toString(numberDestroyer + 1);
+            String position = letterLocationDuo+number;
+            String positionPlusOne = letterLocationDuo+numberPlusOne;
+            for(int i = 0; i <setLocations.size();i++) {
+                if(setLocations.get(i).equals(position) || setLocations.get(i).equals(positionPlusOne)) {
+                    checker = false;
+                }
+            }
+            
+            
+            
+            if(checker = true) {
+                setLocations.add(position);
+                setLocations.add(positionPlusOne);
+                placeDestroyer(position,positionPlusOne);
+                System.out.println(position+positionPlusOne);
+                swag = false;
+            }
+        }
+    }
+    
+    void setSubmarinePosition() {
+        boolean swag = true;
+        boolean checker = true;
+        while(swag) {
+            checker = true;
+            Random randomnizer = new Random();
+            char letterLocation = myLetters.charAt(randomnizer.nextInt(letters.length));
+            
+            
+            int numberDestroyer = (int)(Math.random()*6);
+            String letterLocationDuo = Character.toString(letterLocation);
+            String number = Integer.toString(numberDestroyer);
+            String numberPlusOne = Integer.toString(numberDestroyer+1);
+            String numberPlusTwo = Integer.toString(numberDestroyer+2);
+            
+            String position = letterLocationDuo+number;
+            String positionPlusOne = letterLocationDuo+numberPlusOne;
+            String positionPlusTwo = letterLocationDuo+numberPlusTwo;
+            for(int i = 0; i <setLocations.size();i++) {
+                if(setLocations.get(i).equals(position) || setLocations.get(i).equals(positionPlusOne) || setLocations.get(i).equals(positionPlusTwo)) {
+                    checker = false;
+                }
+            }
+            
+            
+            
+            if(checker = true) {
+                setLocations.add(position);
+                setLocations.add(positionPlusOne);
+                setLocations.add(positionPlusTwo);
+                System.out.println(position+positionPlusOne+positionPlusTwo);
+                placeSubmarine(position,positionPlusTwo);
+                swag = false;
+            }
+        }
+    }
+    
+    void setCruiserPosition() {
+        boolean swag = true;
+        boolean checker = true;
+        while(swag) {
+            checker = true;
+            Random randomnizer = new Random();
+            char letterLocation = myLetters.charAt(randomnizer.nextInt(letters.length));
+            
+            
+            int numberDestroyer = (int)(Math.random()*6);
+            String letterLocationDuo = Character.toString(letterLocation);
+            String number = Integer.toString(numberDestroyer);
+            String numberPlusOne = Integer.toString(numberDestroyer+1);
+            String numberPlusTwo = Integer.toString(numberDestroyer+2);
+            
+            String position = letterLocationDuo+number;
+            String positionPlusOne = letterLocationDuo+numberPlusOne;
+            String positionPlusTwo = letterLocationDuo+numberPlusTwo;
+            for(int i = 0; i <setLocations.size();i++) {
+                if(setLocations.get(i).equals(position) || setLocations.get(i).equals(positionPlusOne) || setLocations.get(i).equals(positionPlusTwo)) {
+                    checker = false;
+                }
+            }
+            
+            
+            
+            if(checker = true) {
+                setLocations.add(position);
+                setLocations.add(positionPlusOne);
+                setLocations.add(positionPlusTwo);
+                System.out.println(position+positionPlusOne+positionPlusTwo);
+                placeCruiser(position,positionPlusTwo);
+                swag = false;
+            }
+        }
+    }
+    
+    void setBattleshipPosition() {
+        boolean swag = true;
+        boolean checker = true;
+        while(swag) {
+            checker = true;
+            Random randomnizer = new Random();
+            char letterLocation = myLetters.charAt(randomnizer.nextInt(letters.length));
+            
+            
+            int numberDestroyer = (int)(Math.random()*5);
+            String letterLocationDuo = Character.toString(letterLocation);
+            String number = Integer.toString(numberDestroyer);
+            String numberPlusOne = Integer.toString(numberDestroyer+1);
+            String numberPlusTwo = Integer.toString(numberDestroyer+2);
+            String numberPlusThree = Integer.toString(numberDestroyer+3);
+            
+            String position = letterLocationDuo+number;
+            String positionPlusOne = letterLocationDuo+numberPlusOne;
+            String positionPlusTwo = letterLocationDuo+numberPlusTwo;
+            String positionPlusThree = letterLocationDuo+numberPlusThree;
+            for(int i = 0; i <setLocations.size();i++) {
+                if(setLocations.get(i).equals(position) || setLocations.get(i).equals(positionPlusOne) || setLocations.get(i).equals(positionPlusTwo) || setLocations.get(i).equals(positionPlusThree)) {
+                    checker = false;
+                }
+            }
+            
+            
+            
+            if(checker = true) {
+                setLocations.add(position);
+                setLocations.add(positionPlusOne);
+                setLocations.add(positionPlusTwo);
+                setLocations.add(positionPlusThree);
+                System.out.println(position+positionPlusOne+positionPlusTwo+positionPlusThree);
+                placeBattleship(position,positionPlusThree);
+                swag = false;
+            }
+        }
+    }
+    
+    
+    void setCarrierPosition() {
+        boolean swag = true;
+        boolean checker = true;
+        while(swag) {
+            checker = true;
+            Random randomnizer = new Random();
+            char letterLocation = myLetters.charAt(randomnizer.nextInt(letters.length));
+            
+            
+            int numberDestroyer = (int)(Math.random()*4);
+            String letterLocationDuo = Character.toString(letterLocation);
+            String number = Integer.toString(numberDestroyer);
+            String numberPlusOne = Integer.toString(numberDestroyer+1);
+            String numberPlusTwo = Integer.toString(numberDestroyer+2);
+            String numberPlusThree = Integer.toString(numberDestroyer+3);
+            String numberPlusFour = Integer.toString(numberDestroyer+4);
+            
+            String position = letterLocationDuo+number;
+            String positionPlusOne = letterLocationDuo+numberPlusOne;
+            String positionPlusTwo = letterLocationDuo+numberPlusTwo;
+            String positionPlusThree = letterLocationDuo+numberPlusThree;
+            String positionPlusFour = letterLocationDuo+numberPlusFour;
+            for(int i = 0; i <setLocations.size();i++) {
+                if(setLocations.get(i).equals(position) || setLocations.get(i).equals(positionPlusOne) || setLocations.get(i).equals(positionPlusTwo) || setLocations.get(i).equals(positionPlusThree) || setLocations.get(i).equals(positionPlusFour)) {
+                    checker = false;
+                }
+            }
+            
+            
+            
+            if(checker = true) {
+                setLocations.add(position);
+                setLocations.add(positionPlusOne);
+                setLocations.add(positionPlusTwo);
+                setLocations.add(positionPlusThree);
+                setLocations.add(positionPlusFour);
+                System.out.println(position+positionPlusOne+positionPlusTwo+positionPlusThree+positionPlusFour);
+                placeCarrier(position,positionPlusFour);
+                swag = false;
+            }
+        }
+    }
+    //The end of the place randomnizer
+
 
 	void makeMove() {
 		Random rand = new Random();
